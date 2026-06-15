@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Game Engine</title>
+    <script type="module" crossorigin src="./assets/index-B0DUt21p.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CKVKQgVc.css">
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="blocker">
+      <div id="instructions">
+        <p style="font-size:36px; margin-bottom: 10px; margin-top: 0;">Click to play</p>
+        <p style="font-size: 18px; margin: 0; color: #ccc;">Move: WASD | Look: MOUSE | Shoot: L-CLICK | Reload: R</p>
+      </div>
+      <div id="settings-menu" style="display: none; background: rgba(0,0,0,0.8); padding: 20px; border-radius: 8px; border: 1px solid #444; color: white; font-family: monospace; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 320px; max-height: 80vh; overflow-y: auto;">
+        <h2 style="margin-top: 0; border-bottom: 1px solid #555; padding-bottom: 10px;">Görüntü Ayarları</h2>
+        
+        <div style="margin-bottom: 15px;">
+          <b style="color: #ffdd66;">☀ Güneş Ayarları</b><br>
+          <label><input type="checkbox" id="toggleSun"> <b>Güneşi Göster</b></label><br>
+          <label for="sunElevation">Yükseklik: <span id="sunElevationVal">5</span>°</label><br>
+          <input type="range" id="sunElevation" min="0" max="60" step="1" value="5" style="width: 100%;">
+          <label for="sunAzimuth">Azimut: <span id="sunAzimuthVal">115</span>°</label><br>
+          <input type="range" id="sunAzimuth" min="0" max="360" step="1" value="115" style="width: 100%;">
+          <label for="sunBrightness">Parlaklık (Mie): <span id="sunBrightnessVal">0.005</span></label><br>
+          <input type="range" id="sunBrightness" min="0.0001" max="1.0" step="0.001" value="0.005" style="width: 100%;">
+          <label for="sunSharpness">Güneş Keskinliği: <span id="sunSharpnessVal">0.995</span></label><br>
+          <input type="range" id="sunSharpness" min="0.7" max="0.9999" step="0.0001" value="0.995" style="width: 100%;">
+          <label for="sunSize">Hale Boyutu (Rayleigh): <span id="sunSizeVal">4.0</span></label><br>
+          <input type="range" id="sunSize" min="0.1" max="10" step="0.1" value="4.0" style="width: 100%;">
+          <label for="sunTurbidity">Bulanıklık (Turbidity): <span id="sunTurbidityVal">20.0</span></label><br>
+          <input type="range" id="sunTurbidity" min="0.1" max="50" step="0.1" value="20.0" style="width: 100%;">
+          <label for="sunColor">Renk: </label>
+          <input type="color" id="sunColor" value="#ffdd66" style="width: 60px; vertical-align: middle;">
+        </div>
+        <div style="margin-bottom: 15px;">
+          <label><input type="checkbox" id="toggleBloom" checked> <b>Bloom (Parlama)</b></label><br>
+          <label for="bloomStrength">Güç: <span id="bloomStrengthVal">0.7</span></label><br>
+          <input type="range" id="bloomStrength" min="0" max="3" step="0.1" value="0.7" style="width: 100%;">
+          <label for="bloomThreshold">Eşik: <span id="bloomThresholdVal">0.75</span></label><br>
+          <input type="range" id="bloomThreshold" min="0" max="1" step="0.05" value="0.75" style="width: 100%;">
+          <label for="bloomRadius">Çap: <span id="bloomRadiusVal">1.0</span></label><br>
+          <input type="range" id="bloomRadius" min="0" max="2" step="0.05" value="1.0" style="width: 100%;">
+        </div>
+
+        <div style="margin-bottom: 15px; border-top: 1px solid #444; padding-top: 10px;">
+          <label><input type="checkbox" id="toggleFilmGrain"> <b>Film Grain</b></label><br>
+          <label for="filmGrain">Karıncalanma: <span id="filmGrainVal">0.35</span></label><br>
+          <input type="range" id="filmGrain" min="0" max="2" step="0.05" value="0.35" style="width: 100%;">
+        </div>
+
+        <div style="margin-bottom: 15px; border-top: 1px solid #444; padding-top: 10px;">
+          <label><input type="checkbox" id="toggleSMAA"> <b>SMAA</b> (Kenar Yumuşatma)</label>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+          <label><input type="checkbox" id="toggleSSAO"> <b>SSAO</b> (Derinlik Gölgeleri)</label>
+        </div>
+
+        <div style="margin-bottom: 15px; border-top: 1px solid #444; padding-top: 10px;">
+          <label><input type="checkbox" id="toggleBokeh"> <b>Bokeh</b> (Alan Derinliği / Focus)</label><br>
+          <label for="bokehFocus">Odak Uzaklığı: <span id="bokehFocusVal">10.0</span></label><br>
+          <input type="range" id="bokehFocus" min="1" max="500" step="1" value="10" style="width: 100%;">
+          <label for="bokehAperture">Açıklık (Aperture): <span id="bokehApertureVal">0.0001</span></label><br>
+          <input type="range" id="bokehAperture" min="0" max="0.01" step="0.0001" value="0.0001" style="width: 100%;">
+          <label for="bokehMaxblur">Max Bulanıklık: <span id="bokehMaxblurVal">0.01</span></label><br>
+          <input type="range" id="bokehMaxblur" min="0" max="0.05" step="0.001" value="0.01" style="width: 100%;">
+        </div>
+
+        <div style="margin-bottom: 15px; border-top: 1px solid #444; padding-top: 10px;">
+          <label><input type="checkbox" id="toggleRGBShift"> <b>RGB Shift</b> (Kromatik Sapma)</label><br>
+          <label for="rgbAmount">Miktar: <span id="rgbAmountVal">0.005</span></label><br>
+          <input type="range" id="rgbAmount" min="0" max="0.05" step="0.001" value="0.005" style="width: 100%;">
+        </div>
+
+        <div style="margin-bottom: 15px; border-top: 1px solid #444; padding-top: 10px;">
+          <label><input type="checkbox" id="togglePixelation"> <b>Pixelation</b> (Retro 8-bit)</label><br>
+          <label for="pixelSize">Piksel Boyutu: <span id="pixelSizeVal">6</span></label><br>
+          <input type="range" id="pixelSize" min="2" max="32" step="1" value="6" style="width: 100%;">
+        </div>
+
+        <div style="margin-bottom: 15px; border-top: 1px solid #444; padding-top: 10px;">
+          <label><input type="checkbox" id="toggleDotScreen"> <b>Dot Screen</b> (Çizgi Roman)</label><br>
+          <label for="dotScale">Ölçek: <span id="dotScaleVal">4</span></label><br>
+          <input type="range" id="dotScale" min="0.5" max="10" step="0.1" value="4" style="width: 100%;">
+        </div>
+
+        <div style="margin-bottom: 15px; border-top: 1px solid #444; padding-top: 10px;">
+          <label><input type="checkbox" id="toggleHalftone"> <b>Halftone</b> (Gazete Baskısı)</label>
+        </div>
+
+        <div style="margin-bottom: 15px; border-top: 1px solid #444; padding-top: 10px;">
+          <label><input type="checkbox" id="toggleGlitch"> <b>Glitch</b> (Siber Bozulma)</label>
+        </div>
+
+        <div style="margin-bottom: 15px; border-top: 1px solid #444; padding-top: 10px;">
+          <label><input type="checkbox" id="toggleAfterimage"> <b>Motion Blur</b> (Hareket Bulanıklığı)</label><br>
+          <label for="afterDamp">Sünme (Damp): <span id="afterDampVal">0.9</span></label><br>
+          <input type="range" id="afterDamp" min="0" max="0.99" step="0.01" value="0.9" style="width: 100%;">
+        </div>
+
+        <div style="margin-bottom: 15px; border-top: 1px solid #444; padding-top: 10px;">
+          <label><input type="checkbox" id="toggleSSR"> <b>SSR</b> (Yansımalar)</label>
+        </div>
+
+        <div style="margin-bottom: 15px; border-top: 1px solid #444; padding-top: 10px;">
+          <label><input type="checkbox" id="toggleBleach"> <b>Bleach Bypass</b> (Renk Soldurma)</label><br>
+          <label for="bleachOpacity">Opaklık: <span id="bleachOpacityVal">1.0</span></label><br>
+          <input type="range" id="bleachOpacity" min="0" max="1" step="0.05" value="1.0" style="width: 100%;">
+        </div>
+        <div style="margin-bottom: 15px; border-top: 1px solid #444; padding-top: 10px;">
+          <label><input type="checkbox" id="toggleSepia"> <b>Sepia</b> (Nostaljik Kahverengi)</label><br>
+          <label for="sepiaAmount">Miktar: <span id="sepiaAmountVal">1.0</span></label><br>
+          <input type="range" id="sepiaAmount" min="0" max="1" step="0.05" value="1.0" style="width: 100%;">
+        </div>
+        <div style="margin-bottom: 15px; border-top: 1px solid #444; padding-top: 10px;">
+          <label><input type="checkbox" id="toggleVignette"> <b>Vignette</b> (Köşe Karartması)</label><br>
+          <label for="vignetteOffset">Ofset: <span id="vignetteOffsetVal">1.0</span></label><br>
+          <input type="range" id="vignetteOffset" min="0" max="3" step="0.1" value="1.0" style="width: 100%;">
+          <label for="vignetteDarkness">Koyuluk: <span id="vignetteDarknessVal">1.5</span></label><br>
+          <input type="range" id="vignetteDarkness" min="0" max="3" step="0.1" value="1.5" style="width: 100%;">
+        </div>
+        <div style="margin-bottom: 15px; border-top: 1px solid #444; padding-top: 10px;">
+          <label><input type="checkbox" id="toggleHueSat"> <b>Hue / Saturation</b> (Canlılık)</label><br>
+          <label for="hueValue">Renk Tonu (Hue): <span id="hueValueVal">0.0</span></label><br>
+          <input type="range" id="hueValue" min="-1" max="1" step="0.05" value="0.0" style="width: 100%;">
+          <label for="saturationValue">Doygunluk: <span id="saturationValueVal">0.5</span></label><br>
+          <input type="range" id="saturationValue" min="-1" max="1" step="0.05" value="0.5" style="width: 100%;">
+        </div>
+        <div style="margin-bottom: 15px; border-top: 1px solid #444; padding-top: 10px;">
+          <label><input type="checkbox" id="toggleBrightCont"> <b>Brightness / Contrast</b></label><br>
+          <label for="brightnessValue">Parlaklık: <span id="brightnessValueVal">0.1</span></label><br>
+          <input type="range" id="brightnessValue" min="-1" max="1" step="0.05" value="0.1" style="width: 100%;">
+          <label for="contrastValue">Kontrast: <span id="contrastValueVal">0.2</span></label><br>
+          <input type="range" id="contrastValue" min="-1" max="1" step="0.05" value="0.2" style="width: 100%;">
+        </div>
+        
+        <p style="font-size: 12px; color: #aaa; margin-bottom: 0;">Menüyü kapatmak için Y'ye basın.</p>
+      </div>
+    </div>
+    <div id="crosshair">+</div>
+    <div id="ammo-counter" style="position: absolute; bottom: 30px; right: 40px; color: white; font-family: monospace; font-size: 32px; font-weight: bold; text-shadow: 2px 2px 0 #000; pointer-events: none; z-index: 100;">30 / 90</div>
+  </body>
+</html>
